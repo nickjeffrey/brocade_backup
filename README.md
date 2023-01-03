@@ -33,8 +33,11 @@ Download the .pl and .cfg files to /home/brocade/ on the UNIX box
 
 # Create cron job on UNIX box
 This script is configured to run from a cron job on a UNIX box 
+
 This script is run from the crontab of the brocade userid
+
 If you have multiple backup servers, just stagger the backups by an hour so we have backups at multiple sites
+
 ```  45 4 * * 1 /home/brocade/brocade_backup.pl >/dev/null 2>&1    #backup Brocade configs Mondays at 04:45 ```
 
 
