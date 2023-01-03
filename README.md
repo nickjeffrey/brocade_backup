@@ -55,7 +55,6 @@ Please edit the ```/home/brocade/brocade_backup.cfg``` file to match your site-s
     host=sansw01,sansw02,10.20.30.41,10.20.30.42
 ```
 
-```
 
 
 # Create cron job on UNIX box
