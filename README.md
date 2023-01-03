@@ -5,7 +5,39 @@ script to backup configs on Brocade Fibre Channel switches
 
  This script will pull the configuration information from a Brocade fibre switch and dump them into a directory on a UNIX host where they will get backed up to tape during the regular filesystem backups.
 
-# Setup Tasks
+# Create user account on UNIX box
+
+Create a low privilege user account on the UNIX box that will be used to run this perl script and hold the Brocade config backups.
+Example userid creation for AIX:
+```
+     mkuser -a id=30007 maxage=0 home=/home/brocade brocade
+     passwd brocade
+     pwdadm -c brocade
+     echo Creating SSH key pair for brocade user
+     su - brocade
+     ssh-keygen 
+```
+
+Example userid creation for Linux:
+```
+     useradd --uid=30007 --home-dir=/home/brocade brocade
+     passwd brocade
+     echo Creating SSH key pair for brocade user
+     su - brocade
+     ssh-keygen 
+```
+
+# Download files
+Download the .pl and .cfg files to /home/brocade/ on the UNIX box
+
+# Create cron job on UNIX box
+This script is configured to run from a cron job on a UNIX box 
+This script is run from the crontab of the brocade userid
+If you have multiple backup servers, just stagger the backups by an hour so we have backups at multiple sites
+```  45 4 * * 1 /home/brocade/brocade_backup.pl >/dev/null 2>&1    #backup Brocade configs Mondays at 04:45 ```
+
+
+# Create user account on Brocade switches
 
 You will need an identical userid/password on all the Brocade fibre switches.  The following example shows how to create a userid called "backup" with a role of "admin" and a descriptive message.  It would be nice if we could just create a user with the "operator" role, but we need the "admin" role to run the configUpload command.
 ```
@@ -62,29 +94,6 @@ When running the "configUpload" command on each Brocade switch, a copy of the sw
 
 It is assumed that a user account on the SCP server exists (because this script chown's to that user)
 
-Example userid creation for AIX:
-```
-     mkuser -a id=30007 maxage=0 home=/home/brocade brocade
-     passwd brocade
-     pwdadm -c brocade
-     echo Creating SSH key pair for brocade user
-     su - brocade
-     ssh-keygen 
-```
-
-Example userid creation for Linux:
-```
-     useradd --uid=30007 --home-dir=/home/brocade brocade
-     passwd brocade
-     echo Creating SSH key pair for brocade user
-     su - brocade
-     ssh-keygen 
-```
-
-This script is configured to run from a cron job on a UNIX box 
-This script is run from the crontab of the brocade userid
-If you have multiple backup servers, just stagger the backups by an hour so we have backups at multiple sites
-```  45 4 * * 1 /home/brocade/brocade_backup.pl >/dev/null 2>&1    #backup Brocade configs Mondays at 04:45 ```
 
 
 
