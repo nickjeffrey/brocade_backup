@@ -31,6 +31,33 @@ Example userid creation for Linux:
 # Download files
 Download the .pl and .cfg files to /home/brocade/ on the UNIX box
 
+# Edit config file
+Please edit the ```/home/brocade/brocade_backup.cfg``` file to match your site-specific details.  A sample is shown below:
+```
+    #
+    # email address details 
+    #
+    to=janedoe@example.com,helpdesk@example.com
+    from=alerts@example.com
+    subject=Brocade switch backup report
+
+    #
+    # SCP server that Brocade switches send backups to
+    #
+    scpserver=server01.example.com
+    scpuser=brocade
+    scppass=SomeSecretPassword
+    
+    
+    # 
+    # Brocade switches to be backed up
+    #
+    host=sansw01,sansw02,10.20.30.41,10.20.30.42
+```
+
+```
+
+
 # Create cron job on UNIX box
 This script is configured to run from a cron job on a UNIX box 
 
