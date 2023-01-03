@@ -118,7 +118,7 @@ You will need to append this public key to the authorized_keys file on the UNIX 
 
 # Assumptions
 
- It is assumed that this script is being run on a UNIX-like server with a running SSH/SCP daemon.  
+ It is assumed that this script is being run on a UNIX-like server with a running SSH/SCP daemon.  This script has been tested on AIX and Linux, other UNIX flavours are expected to work.  
 
 When running the "configUpload" command on each Brocade switch, a copy of the switch config will be sent via SCP
 
