@@ -145,8 +145,16 @@
 #  In the event that a Brocade switch is lost/destroyed/corrupted, and you want to restore the
 #  backed up version of the config, you can use this procedure:
 #    1) Get the switch on the network 
-#    2) ssh into the switch
+#    2) Login to the switch via the local serial console port, or SSH in over the network
 #    3) Use the "ConfigDownload" command to download the switchname.config.txt file that was backed up
+#    4) Confirm IP address, subnet mask, default gateway is correct with: ipAddrShow
+#    5) Confirm DNS config information is correct with: dnsConfig --show
+#    6) Confirm SNMP configuration is correct with: snmpConfig --show snmpv1
+#    7) Confirm "backup" userid exists with: userConfig --show backup
+#    8) The SSH host key may have changed if there was a hardware replacement, confirm this backup script can automatically login to the new switch.
+#    9) If required, re-run the SSH key setup process described in this script for setting up a new switch
+
+
 
 
 use strict;							#enforce good coding practices
@@ -1225,8 +1233,14 @@ sub generate_readme {
    print README "   3) Reboot the brocade switch with the \"switchreboot\" command.\n";
    print README "   4) Verify that the switch comes back online.\n";
    print README "   5) Verify that the disk paths provided by that switch are working again.\n";
+   print README "   6) Confirm DNS config information is correct with: dnsConfig --show \n";
+   print README "   7) Confirm SNMP configuration is correct with: snmpConfig --show snmpv1 \n";
+   print README "   8) Confirm "backup" userid exists with: userConfig --show backup \n";
+   print README "   9) The SSH host key may have changed if there was a hardware replacement, confirm this backup script can automatically login to the new switch. \n";
+   print README "   10) If required, re-run the SSH key setup process described in this script for setting up a new switch \n";
    close README;											#close filehandle
 }													#end of subroutine
+
 
 
 
