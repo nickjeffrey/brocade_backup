@@ -148,6 +148,7 @@ In the event that a Brocade switch is lost/destroyed/corrupted, and you want to 
 - Get the switch on the network 
 - ssh into the switch
 - Use the "ConfigDownload" command to download the switchname.config.txt file that was backed up
+- Running the "ConfigDownload" command will restore the zone configs, but will not re-create any user accounts, DNS configuration, SNMP configuration, SSH keys.
 
 # Sample email report 
 
