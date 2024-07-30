@@ -42,6 +42,7 @@
 #  2022/05/30	njeffrey	Add get_fabos_version subroutine 
 #  2022/05/30	njeffrey	FabOS 8.2.2 requires -P 22 parameter to specify the TCP port on the configUpload command
 #  2023/01/03	njeffrey	Add read_config_file subroutine
+#  2024/07/29   njeffrey        Remove -p MySecretPassword parameter from supportSave command, because we have switched from FTP to SCP, so we can use SSH key pair auth instead of hardcoded password
 
 
 
@@ -927,11 +928,13 @@ sub get_supportsave {
       #
       # ssh into the switch and gather a supportSave
       # VERY ANNOYING NOTE: As of FabOS 7.x, the supportSave command requires a hardcoded SCP password, so we cannot use SSH key pairs
+      # ANNOYANCE SOLVED: As of FabOS 9.x, the supportSave command no longer requires a hardcoded password, so we can finally use SSH key pairs
       #
       if ( $supportsave eq "yes" ) {									#skip if the --supportsave=no parameter was provided as a command line switch
          print "   running supportSave to collect RASLOG, TRACE, supportShow, core file, FFDC data, and send to $scpserver via SCP \n";
          print "   NOTE: This command can take up to 15 minutes to run - please be patient... \n";
-         $cmd = "supportSave -n -u $scpuser -p $scppass -h $scpserver -d $switch_details{$key}{hostname}/supportSave -l scp";
+         $cmd = "supportSave -n -u $scpuser -p $scppass -h $scpserver -d $switch_details{$key}{hostname}/supportSave -l scp";  #comment out line using -p $scppass, now using SSH key pair auth
+	 $cmd = "supportSave -n -u $scpuser -h $scpserver -d $switch_details{$key}{hostname}/supportSave -l scp";
          print "   running $ssh $brocade_userid\@$switch_details{$key}{hostname} $cmd \n" if ($verbose eq "yes");
          open(SSH,"$ssh $brocade_userid\@$switch_details{$key}{hostname} $cmd  |") or die "$!\n";
          while (<SSH>) {
@@ -1235,7 +1238,7 @@ sub generate_readme {
    print README "   5) Verify that the disk paths provided by that switch are working again.\n";
    print README "   6) Confirm DNS config information is correct with: dnsConfig --show \n";
    print README "   7) Confirm SNMP configuration is correct with: snmpConfig --show snmpv1 \n";
-   print README "   8) Confirm "backup" userid exists with: userConfig --show backup \n";
+   print README "   8) Confirm \"backup\" userid exists with: userConfig --show backup \n";
    print README "   9) The SSH host key may have changed if there was a hardware replacement, confirm this backup script can automatically login to the new switch. \n";
    print README "   10) If required, re-run the SSH key setup process described in this script for setting up a new switch \n";
    close README;											#close filehandle
